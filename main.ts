@@ -1,4 +1,4 @@
-import { App, Editor, Plugin, SuggestModal, MarkdownView } from 'obsidian';
+import { App, Editor, Plugin, SuggestModal, MarkdownView} from 'obsidian';
 
 export default class MyPlugin extends Plugin {
 	onload() {
@@ -7,7 +7,7 @@ export default class MyPlugin extends Plugin {
 			name: 'Go to line',
 			checkCallback: (checking: boolean) => {
 				let leaf = this.app.workspace.activeLeaf;
-				if (leaf && leaf.getViewState().type === "markdown" && leaf.getViewState().state.mode === "source") {
+				if (leaf.view instanceof MarkdownView && leaf.getViewState().state.mode === "source") {
 					if (!checking) {
 						//@ts-ignore
 						new GotoModal(this.app, leaf.view.editor).open();
@@ -20,6 +20,9 @@ export default class MyPlugin extends Plugin {
 	}
 }
 
+/* I am using a SuggestModal here, because I wanted to
+replicate the Design of the Input Field at the top.
+This was seemingly the easiest way to do it.  */
 class GotoModal extends SuggestModal<string> {
 	editor: Editor;
 
