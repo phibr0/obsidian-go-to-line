@@ -1,112 +1,61 @@
-import { App, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
-
-interface MyPluginSettings {
-	mySetting: string;
-}
-
-const DEFAULT_SETTINGS: MyPluginSettings = {
-	mySetting: 'default'
-}
+import { App, Editor, Plugin, SuggestModal, MarkdownView } from 'obsidian';
 
 export default class MyPlugin extends Plugin {
-	settings: MyPluginSettings;
-
-	async onload() {
-		console.log('loading plugin');
-
-		await this.loadSettings();
-
-		this.addRibbonIcon('dice', 'Sample Plugin', () => {
-			new Notice('This is a notice!');
-		});
-
-		this.addStatusBarItem().setText('Status Bar Text');
-
+	onload() {
 		this.addCommand({
-			id: 'open-sample-modal',
-			name: 'Open Sample Modal',
-			// callback: () => {
-			// 	console.log('Simple Callback');
-			// },
+			id: 'go-to-line',
+			name: 'Go to line',
 			checkCallback: (checking: boolean) => {
 				let leaf = this.app.workspace.activeLeaf;
-				if (leaf) {
+				if (leaf && leaf.getViewState().type === "markdown" && leaf.getViewState().state.mode === "source") {
 					if (!checking) {
-						new SampleModal(this.app).open();
+						//@ts-ignore
+						new GotoModal(this.app, leaf.view.editor).open();
 					}
 					return true;
 				}
 				return false;
 			}
 		});
-
-		this.addSettingTab(new SampleSettingTab(this.app, this));
-
-		this.registerCodeMirror((cm: CodeMirror.Editor) => {
-			console.log('codemirror', cm);
-		});
-
-		this.registerDomEvent(document, 'click', (evt: MouseEvent) => {
-			console.log('click', evt);
-		});
-
-		this.registerInterval(window.setInterval(() => console.log('setInterval'), 5 * 60 * 1000));
-	}
-
-	onunload() {
-		console.log('unloading plugin');
-	}
-
-	async loadSettings() {
-		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
-	}
-
-	async saveSettings() {
-		await this.saveData(this.settings);
 	}
 }
 
-class SampleModal extends Modal {
-	constructor(app: App) {
+class GotoModal extends SuggestModal<number> {
+	editor: Editor;
+
+	constructor(app: App, editor: Editor) {
 		super(app);
+		this.editor = editor;
+
+		this.modalEl.addClass("GTL-modal");
+		this.inputEl.placeholder = `Line Number between 1 and ${editor.lineCount()}`;
 	}
 
-	onOpen() {
-		let {contentEl} = this;
-		contentEl.setText('Woah!');
+
+	getSuggestions(str: string): number[] {
+		if (str) {
+			const n = Number.parseInt(str) - 1;
+			if (n >= 0 && n < this.editor.lineCount()) {
+				this.inputEl.removeClass("is-invalid");
+				return [n];
+			}
+			this.inputEl.addClass("is-invalid");
+		} else {
+			this.inputEl.removeClass("is-invalid");
+			return [-1];
+		}
 	}
 
-	onClose() {
-		let {contentEl} = this;
-		contentEl.empty();
-	}
-}
-
-class SampleSettingTab extends PluginSettingTab {
-	plugin: MyPlugin;
-
-	constructor(app: App, plugin: MyPlugin) {
-		super(app, plugin);
-		this.plugin = plugin;
+	renderSuggestion(_: number, __: HTMLElement) {
+		return;
 	}
 
-	display(): void {
-		let {containerEl} = this;
-
-		containerEl.empty();
-
-		containerEl.createEl('h2', {text: 'Settings for my awesome plugin.'});
-
-		new Setting(containerEl)
-			.setName('Setting #1')
-			.setDesc('It\'s a secret')
-			.addText(text => text
-				.setPlaceholder('Enter your secret')
-				.setValue('')
-				.onChange(async (value) => {
-					console.log('Secret: ' + value);
-					this.plugin.settings.mySetting = value;
-					await this.plugin.saveSettings();
-				}));
+	onChooseSuggestion(item: number, _: MouseEvent | KeyboardEvent) {
+		if(item != -1) {
+			this.editor.setCursor({
+				line: item,
+				ch: 0,
+			});
+		}
 	}
 }
