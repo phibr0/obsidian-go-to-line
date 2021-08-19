@@ -2,6 +2,8 @@
 
 This Plugin adds a new Command to go to a specific Line and Character in Obsidian.
 
+> This Plugin was created by request of @arvn over on Discord
+
 ## How to install
 
 1. Go to **Community Plugins** in your [Obsidian](https://www.obsidian.md) Settings and **disable** Safe Mode
