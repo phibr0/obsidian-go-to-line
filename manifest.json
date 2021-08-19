@@ -1,10 +1,10 @@
 {
-	"id": "obsidian-sample-plugin",
-	"name": "Sample Plugin",
-	"version": "1.0.1",
-	"minAppVersion": "0.9.12",
-	"description": "This is a sample plugin for Obsidian. This plugin demonstrates some of the capabilities of the Obsidian API.",
-	"author": "Obsidian",
-	"authorUrl": "https://obsidian.md/about",
+	"id": "obsidian-go-to-line",
+	"name": "Go to Line",
+	"version": "0.0.1",
+	"minAppVersion": "0.12.11",
+	"description": "This Plugin provides a go to Line Command",
+	"author": "phibr0",
+	"authorUrl": "https://github.com/phibr0",
 	"isDesktopOnly": false
 }
