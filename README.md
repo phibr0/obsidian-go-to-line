@@ -5,6 +5,8 @@ You can find the Command using the Command Palette or set a Hotkey for it.
 When using it a Textfield will appear,
 you can type in just the Line Number or do `line:column`, for example `15:27` for Line 15 and Character 27.
 
+> This Plugin was created by request of @arvn over on Discord
+
 ## How to install
 
 1. Go to **Community Plugins** in your [Obsidian](https://www.obsidian.md) Settings and **disable** Safe Mode
