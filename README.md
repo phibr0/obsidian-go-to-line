@@ -1,11 +1,11 @@
 # Obsidian Go To Line [![GitHub tag (Latest by date)](https://img.shields.io/github/v/tag/phibr0/obsidian-go-to-line)](https://github.com/phibr0/obsidian-go-to-line/releases) ![GitHub all releases](https://img.shields.io/github/downloads/phibr0/obsidian-go-to-line/total)
 
+> This Plugin was created by request of @arvn over on Discord
+
 This Plugin adds a new Command to go to a specific Line and Character in Obsidian.
 You can find the Command using the Command Palette or set a Hotkey for it.
 When using it a Textfield will appear,
 you can type in just the Line Number or do `line:column`, for example `15:27` for Line 15 and Character 27.
-
-> This Plugin was created by request of @arvn over on Discord
 
 ## How to install
 
