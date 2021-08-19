@@ -1,4 +1,3 @@
-/* Sets all the text color to red! */
-body {
-    color: red;
+.GTL-modal .prompt-results {
+    display: none;
 }
