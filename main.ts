@@ -35,10 +35,20 @@ class GotoModal extends SuggestModal<string> {
 	getSuggestions(str: string): string[] {
 		if (str) {
 			const operations = str.split(":");
-			const line = Number.parseInt(operations.first());
-			if (line >= 0 && line < this.editor.lineCount()) {
-				this.inputEl.removeClass("is-invalid");
-				return [str];
+			if (operations.length === 2) {
+				const line = Number.parseInt(operations.first());
+				const char = Number.parseInt(operations.last());
+				if (line >= 0 && line < this.editor.lineCount()
+					&& char >= 0 && char <= this.editor.getLine(line - 1).length) {
+					this.inputEl.removeClass("is-invalid");
+					return [str];
+				}
+			} else {
+				const line = Number.parseInt(operations.first());
+				if (line >= 0 && line < this.editor.lineCount()) {
+					this.inputEl.removeClass("is-invalid");
+					return [str];
+				}
 			}
 			this.inputEl.addClass("is-invalid");
 		} else {
