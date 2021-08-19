@@ -20,7 +20,7 @@ export default class MyPlugin extends Plugin {
 	}
 }
 
-class GotoModal extends SuggestModal<number> {
+class GotoModal extends SuggestModal<string> {
 	editor: Editor;
 
 	constructor(app: App, editor: Editor) {
@@ -32,30 +32,44 @@ class GotoModal extends SuggestModal<number> {
 	}
 
 
-	getSuggestions(str: string): number[] {
+	getSuggestions(str: string): string[] {
 		if (str) {
-			const n = Number.parseInt(str) - 1;
-			if (n >= 0 && n < this.editor.lineCount()) {
+			const operations = str.split(":");
+			const line = Number.parseInt(operations.first());
+			if (line >= 0 && line < this.editor.lineCount()) {
 				this.inputEl.removeClass("is-invalid");
-				return [n];
+				return [str];
 			}
 			this.inputEl.addClass("is-invalid");
 		} else {
 			this.inputEl.removeClass("is-invalid");
-			return [-1];
+			return [(-1).toString()];
 		}
 	}
 
-	renderSuggestion(_: number, __: HTMLElement) {
+	renderSuggestion(_: string, __: HTMLElement) {
 		return;
 	}
 
-	onChooseSuggestion(item: number, _: MouseEvent | KeyboardEvent) {
-		if(item != -1) {
-			this.editor.setCursor({
-				line: item,
-				ch: 0,
-			});
+	onChooseSuggestion(item: string, _: MouseEvent | KeyboardEvent) {
+		const operations = item.split(":");
+		if (operations.length === 2) {
+			const line = Number.parseInt(operations.first());
+			const char = Number.parseInt(operations.last());
+			if (line != -1) {
+				this.editor.setCursor({
+					line: line - 1,
+					ch: char,
+				});
+			}
+		} else {
+			const line = Number.parseInt(operations.first());
+			if (line != -1) {
+				this.editor.setCursor({
+					line: line - 1,
+					ch: 0,
+				});
+			}
 		}
 	}
 }
