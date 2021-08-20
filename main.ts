@@ -1,20 +1,12 @@
-import { App, Editor, Plugin, SuggestModal, MarkdownView} from 'obsidian';
+import { App, Editor, Plugin, SuggestModal, MarkdownView } from 'obsidian';
 
 export default class MyPlugin extends Plugin {
 	onload() {
 		this.addCommand({
 			id: 'go-to-line',
 			name: 'Go to line',
-			checkCallback: (checking: boolean) => {
-				let leaf = this.app.workspace.activeLeaf;
-				if (leaf.view instanceof MarkdownView && leaf.getViewState().state.mode === "source") {
-					if (!checking) {
-						//@ts-ignore
-						new GotoModal(this.app, leaf.view.editor).open();
-					}
-					return true;
-				}
-				return false;
+			editorCallback: (editor: Editor) => {
+				new GotoModal(this.app, editor).open();
 			}
 		});
 	}
