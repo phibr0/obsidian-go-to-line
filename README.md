@@ -2,10 +2,35 @@
 
 > This Plugin was created by request of @arvn over on Discord
 
-This Plugin adds a new Command to go to a specific Line and Character in Obsidian.
-You can find the Command using the Command Palette or set a Hotkey for it.
-When using it a Textfield will appear,
-you can type in just the Line Number or do `line:column`, for example `15:27` for Line 15 and Character 27.
+This Plugin adds new Commands to go to specific Lines and Characters in Obsidian.
+You can find the Commands using the Command Palette or set a Hotkey for it.
+
+By default, a single Cursor's location is saved as `line:column` and multiple Cursors
+are saved as `line:column,line:column,...`. The `:` and `,` seperators can be customized
+in the "Go to Line" settings pane.
+
+### Commands
+
+#### 1. `Go to line`
+
+A Textfield will appear, you can type in just the Line Number or do `line:column`,
+for example `15:27` for Line 15 and Character 27.
+
+#### 2. `Go to line with clipboard contents`
+
+Bypass the popup asking for line number and use the contents of your clipboard to
+automatically set the cursors in the active panel. No action is taken if clipboard
+conents are not valid line information.
+
+#### 3. `Copy cursor line number`
+
+Copies the primary line and character information to the clipboard (destroying
+the current clipboard contents). If multiple cursors exist, only 1 will be copied.
+
+#### 4. `Copy all cursor line numbers`
+
+Copies all cursor line and character information to the clipboard
+(destroying the current clipboard contents).
 
 ## How to install
 
